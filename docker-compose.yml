@@ -1,0 +1,20 @@
+services:
+  postgres:
+    image: postgres:18
+    container_name: sql-interview-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: sqlstudent
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-local_only_password}
+      POSTGRES_DB: sql_interview
+    ports:
+      - "127.0.0.1:5433:5432"
+    volumes:
+      - sql_interview_data:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U sqlstudent -d sql_interview"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+volumes:
+  sql_interview_data:
